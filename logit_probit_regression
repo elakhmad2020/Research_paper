@@ -1,0 +1,42 @@
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load your data
+data = pd.read_csv('Survey - Data.csv')
+
+# Logit model for Health Insurance Awareness
+X = data[['Chronic_condition', 'Hospital_visits', 'Health_spending', 'Family_size']]
+X = sm.add_constant(X)  # Add intercept
+y = data['Health_insurance_aware']
+
+model = sm.Logit(y, X)
+result = model.fit()
+print(result.summary())
+
+# Coefficient plot
+plt.figure(figsize=(10, 6))
+coef = result.params.drop('const')  # Drop the intercept
+coef.plot(kind='bar', color='skyblue')
+plt.title('Logit Model: Coefficients for Health Insurance Awareness')
+plt.xlabel('Variables')
+plt.ylabel('Coefficient Value')
+plt.axhline(0, color='red', linestyle='--')  
+#Reference line for zero effect
+plt.show()
+
+# Predicted probabilities for Chronic_condition
+X['Chronic_condition'] = 1  # Set Chronic_condition to 1 (has chronic condition)
+pred_1 = result.predict(X)
+X['Chronic_condition'] = 0  # Set Chronic_condition to 0 (no chronic condition)
+pred_0 = result.predict(X)
+
+plt.figure(figsize=(10, 6))
+sns.kdeplot(pred_1, label='With Chronic Condition', shade=True)
+sns.kdeplot(pred_0, label='Without Chronic Condition', shade=True)
+plt.title('Predicted Probability of Health Insurance Awareness')
+plt.xlabel('Predicted Probability')
+plt.ylabel('Density')
+plt.legend()
+plt.show()

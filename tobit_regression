@@ -1,0 +1,40 @@
+import pandas as pd
+from statsmodels.tools.tools import add_constant
+from statsmodels.regression.linear_model import OLS
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load your data
+data = pd.read_csv('Survey - Data.csv')
+
+# Tobit model for Willingness to Pay (WTP)
+X = data[['Health_insurance_aware', 'Takaful_aware', 'Interested_in_takaful', 'Health_spending', 
+'Family_size']]
+X = add_constant(X)  # Add intercept
+y = data['Willingness_to_pay']
+
+# Fit the Tobit model
+model = OLS(y, X)
+result = model.fit()
+print(result.summary())
+
+# Coefficient plot
+plt.figure(figsize=(10, 6))
+coef = result.params.drop('const')  # Drop the intercept
+coef.plot(kind='bar', color='lightgreen')
+plt.title('Tobit Model: Coefficients for Willingness to Pay')
+plt.xlabel('Variables')
+plt.ylabel('Coefficient Value')
+plt.axhline(0, color='red', linestyle='--')  # Reference line for zero effect
+plt.show()
+
+# Predicted vs. Actual WTP
+data['Predicted_WTP'] = result.predict(X)
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=data['Willingness_to_pay'], y=data['Predicted_WTP'], alpha=0.6)
+plt.plot([0, data['Willingness_to_pay'].max()], [0, data['Willingness_to_pay'].max()], color='red', 
+linestyle='--')  # 45-degree line
+plt.title('Predicted vs. Actual Willingness to Pay')
+plt.xlabel('Actual WTP')
+plt.ylabel('Predicted WTP')
+plt.show()
