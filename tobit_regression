@@ -3,9 +3,31 @@ from statsmodels.tools.tools import add_constant
 from statsmodels.regression.linear_model import OLS
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Load your data
 data = pd.read_csv('Survey - Data.csv')
+
+# Check for missing values
+print("Missing Values:\n", data.isnull().sum())
+
+# Check for infinite values
+print("Infinite Values:\n", data.isin([np.inf, -np.inf]).sum())
+
+# Drop rows with missing or infinite values
+data_cleaned = data.replace([np.inf, -np.inf], np.nan).dropna()
+
+data_cleaned = data.dropna()
+
+# Impute missing values with the mean
+data_cleaned = data.replace([np.inf, -np.inf], np.nan).fillna(data.mean())
+
+# Impute missing values for categorical variables
+data['Chronic_disease_type'].fillna('Unknown', inplace=True)
+
+# Impute missing values for numerical variables
+data['Interested_in_takaful'].fillna(data['Interested_in_takaful'].median(), 
+inplace=True)
 
 # Tobit model for Willingness to Pay (WTP)
 X = data[['Health_insurance_aware', 'Takaful_aware', 'Interested_in_takaful', 'Health_spending', 
@@ -38,3 +60,5 @@ plt.title('Predicted vs. Actual Willingness to Pay')
 plt.xlabel('Actual WTP')
 plt.ylabel('Predicted WTP')
 plt.show()
+ 
+data_cleaned.to_csv('Cleaned_Survey_Data.csv', index=False)
