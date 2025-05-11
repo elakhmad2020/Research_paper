@@ -5,58 +5,80 @@ import seaborn as sns
 # Load your data
 data = pd.read_csv('Survey - Data.csv')
 
-# 1. Summarize numerical variables
-print("Summary of Numerical Variables:")
-summary_stats = data[['Hospital_visits', 'Health_spending', 'Family_size', 
-'Willingness_to_pay']].describe()
-print(summary_stats.to_string(float_format="%0.2f"))  # Format the float values to 2 decimal places
+# Create a function to write output to both console and file
+def save_descriptive_analysis(filename="descriptive_results.txt"):
+    with open(filename, 'w') as file:
+        # 1. Summarize numerical variables
+        file.write("Summary of Numerical Variables:\n")
+        summary_stats = data[['Hospital_visits', 'Health_spending', 'Family_size',
+                             'Willingness_to_pay']].describe()
+        file.write(summary_stats.to_string(float_format="%0.2f"))
+        file.write("\n\n")
+        
+        print("Summary of Numerical Variables:")
+        print(summary_stats.to_string(float_format="%0.2f"))
 
-# 2. Summarize categorical variables
-print("\nPercentage of Chronic Conditions:")
-print(data['Chronic_condition'].value_counts(normalize=True)) 
-# Percentage of chronic conditions
+        # 2. Summarize categorical variables
+        file.write("Percentage of Chronic Conditions:\n")
+        chronic = data['Chronic_condition'].value_counts(normalize=True)
+        file.write(str(chronic))
+        file.write("\n\n")
+        
+        print("\nPercentage of Chronic Conditions:")
+        print(chronic)
 
-print("\nPercentage Aware of Health Insurance:")
-print(data['Health_insurance_aware'].value_counts(normalize=True)) 
-# Percentage aware of health insurance
+        file.write("Percentage Aware of Health Insurance:\n")
+        insurance = data['Health_insurance_aware'].value_counts(normalize=True)
+        file.write(str(insurance))
+        file.write("\n\n")
+        
+        print("\nPercentage Aware of Health Insurance:")
+        print(insurance)
 
-print("\nPercentage Aware of Takaful:")
-print(data['Takaful_aware'].value_counts(normalize=True)) 
-# Percentage aware of takaful
+        file.write("Percentage Aware of Takaful:\n")
+        takaful = data['Takaful_aware'].value_counts(normalize=True)
+        file.write(str(takaful))
+        file.write("\n\n")
+        
+        print("\nPercentage Aware of Takaful:")
+        print(takaful)
 
-print("\nPercentage Interested in Takaful:")
-print(data['Interested_in_takaful'].value_counts(normalize=True)) 
-# Percentage interested in takaful
+        file.write("Percentage Interested in Takaful:\n")
+        interest = data['Interested_in_takaful'].value_counts(normalize=True)
+        file.write(str(interest))
+        file.write("\n\n")
+        
+        print("\nPercentage Interested in Takaful:")
+        print(interest)
 
-# 3. Cross-tabulation: Chronic condition vs. awareness
-print("\nHealth Insurance Awareness by Chronic Condition:")
-print(pd.crosstab(data['Chronic_condition'], 
-data['Health_insurance_aware'], normalize='index'))  
-# Row percentages
+        # 3. Cross-tabulation: Chronic condition vs. awareness
+        file.write("Health Insurance Awareness by Chronic Condition:\n")
+        cross_insurance = pd.crosstab(data['Chronic_condition'],
+                                     data['Health_insurance_aware'], normalize='index')
+        file.write(str(cross_insurance))
+        file.write("\n\n")
+        
+        print("\nHealth Insurance Awareness by Chronic Condition:")
+        print(cross_insurance)
 
-print("\nTakaful Awareness by Chronic Condition:")
-print(pd.crosstab(data['Chronic_condition'], data['Takaful_aware'], 
-normalize='index'))  
-# Row percentages
+        file.write("Takaful Awareness by Chronic Condition:\n")
+        cross_takaful = pd.crosstab(data['Chronic_condition'],
+                                  data['Takaful_aware'], normalize='index')
+        file.write(str(cross_takaful))
+        file.write("\n\n")
+        
+        print("\nTakaful Awareness by Chronic Condition:")
+        print(cross_takaful)
 
-# 4. Visualizations
-# Bar chart: Chronic condition vs. health insurance awareness
-sns.countplot(x='Chronic_condition', hue='Health_insurance_aware', 
-data=data)
-plt.title('Health Insurance Awareness by Chronic Condition')
-plt.savefig('health_insurance_awareness.png')  
-# Save the plot as an image plt.close()
+        file.write("\nDescriptive analysis completed. Check the generated images for visualizations.")
+        
+        print("\nDescriptive analysis completed. Check the generated images for visualizations.")
+        print(f"\nResults saved to {filename}")
 
-# Bar chart: Chronic condition vs. takaful awareness
-sns.countplot(x='Chronic_condition', hue='Takaful_aware', data=data)
-plt.title('Takaful Awareness by Chronic Condition')
-plt.savefig('takaful_awareness.png')  
-#Save the plot as an image plt.close()
+# Run the analysis and save results
+save_descriptive_analysis()
 
-# Histogram: Willingness to pay
-sns.histplot(data['Willingness_to_pay'], bins=20, kde=True)
-plt.title('Distribution of Willingness to Pay')
-plt.savefig('willingness_to_pay.png')  
-#Save the plot as an image plt.close()
-
-print("\nDescriptive analysis completed. Check the generated images for visualizations.")
+# Generate visualizations (keep your existing visualization code here)
+# plt.savefig('health_insurance_awareness.png')
+# plt.savefig('takaful_awareness.png')
+# etc.

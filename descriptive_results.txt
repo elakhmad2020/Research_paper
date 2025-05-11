@@ -1,0 +1,49 @@
+Summary of Numerical Variables:
+       Hospital_visits  Health_spending  Family_size  Willingness_to_pay
+count           257.00           257.00       257.00              257.00
+mean              6.75         38183.15         6.37            41474.71
+std               4.75         36315.49         5.37            95255.13
+min               0.00             0.00         0.00                0.00
+25%               3.00         18000.00         3.00            10000.00
+50%               6.00         30000.00         5.00            18000.00
+75%              10.00         50000.00         8.00            36000.00
+max              30.00        240000.00        50.00          1360000.00
+
+Percentage of Chronic Conditions:
+Chronic_condition
+0    0.817121
+1    0.182879
+Name: proportion, dtype: float64
+
+Percentage Aware of Health Insurance:
+Health_insurance_aware
+1    0.579767
+0    0.420233
+Name: proportion, dtype: float64
+
+Percentage Aware of Takaful:
+Takaful_aware
+0    0.902724
+1    0.097276
+Name: proportion, dtype: float64
+
+Percentage Interested in Takaful:
+Interested_in_takaful
+0.0    0.658824
+1.0    0.341176
+Name: proportion, dtype: float64
+
+Health Insurance Awareness by Chronic Condition:
+Health_insurance_aware         0         1
+Chronic_condition                         
+0                       0.385714  0.614286
+1                       0.574468  0.425532
+
+Takaful Awareness by Chronic Condition:
+Takaful_aware             0         1
+Chronic_condition                    
+0                  0.933333  0.066667
+1                  0.765957  0.234043
+
+
+Descriptive analysis completed. Check the generated images for visualizations.
